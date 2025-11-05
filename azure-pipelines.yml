@@ -1,0 +1,14 @@
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: build_and_test
+  displayName: 'AZ Security Scanning'
+  steps:
+  - checkout: self
+  - script: |
+      docker pull armourzero/pipe-scan:latest || true
+      docker run -v "$(System.DefaultWorkingDirectory):/app/wrk" --rm armourzero/pipe-scan:latest --apikey="$(AZ_TOKEN)" --projectkey="fKDZqPJTFSPpwmHVpIVLrJBZdeBNUyXy" --branch="$(Build.SourceBranchName)" --repo="$BUILD_REPOSITORY_NAME"
+    displayName: 'Run Security Test'
+  
